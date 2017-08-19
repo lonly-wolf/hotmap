@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=8ZxthUScD9ktwOwjNRwg4xN6BCTm6qeC"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <script type="text/javascript" src="jquery-3.2.1.min.js"></script>	
     <title>热力图显示模块</title>
     <style type="text/css">
 		ul,li{list-style: none;margin:0;padding:0;float:left;}
@@ -16,19 +17,32 @@
 </head>
 <body>
 	<div id="container"></div>
-<!-- 	<div id="r-result">
-		<input type="button"  onclick="openHeatmap();" value="显示热力图"/><input type="button"  onclick="closeHeatmap();" value="关闭热力图"/>
-	</div> -->
 </body>
 </html>
 <script type="text/javascript">
+
     var map = new BMap.Map("container");          // 创建地图实例
 
     var point = new BMap.Point(116.418261, 39.921984);
     map.centerAndZoom(point, 15);             // 初始化地图，设置中心点坐标和地图级别
     map.enableScrollWheelZoom(); // 允许滚轮缩放
-  
-    var points =[
+   
+    // $('#test').load(points);   将id为test的标签内容设置为points
+    // document.getElementById("test").innerText = points;
+    // alert(points);
+    // var str = JSON.stringify(jsObj);  将object类型的变量转换为object类型的变量
+    // var object = JSON.parse(str);  将str类型变量转换为object类型的变量 
+    //  typeof(variable); 判断变量类型
+    
+    htmlobj  = $.ajax({url:"hotmapdata.json",async:false});
+    var temp = htmlobj.responseText;
+    var points;
+
+    if (temp != null) {
+        points = JSON.parse(temp);
+    } else {
+        alert('can not find hotmapdata.json file,  please check out whether target json file  is exist! just only load demo data!(2017-08-16 from lianjia)')
+    points =[
 {"lat": 39.72675262079634, "averagePrice": "47900", "lng": 115.86283631290442, "houseName": "远洋新仕界", "count": 61.37940145729306},
 {"lat": 39.772849334065356, "averagePrice": "1400", "lng": 116.4327020409797, "houseName": "首开龙湖天琅", "count": 1.7939699799626365},
 {"lat": 39.93632527613467, "averagePrice": "67000", "lng": 116.10666089013267, "houseName": "中骏西山天璟", "count": 85.85427761249761},
@@ -150,7 +164,8 @@
 {"lat": 40.36777347497877, "averagePrice": "39000", "lng": 116.63538813611196, "houseName": "天恒半山世家", "count": 49.974878013244876},
 {"lat": 39.884694706155905, "averagePrice": "1800", "lng": 116.07753894119462, "houseName": "京投发展檀香府", "count": 2.3065328313805327}
 ];
-   
+    }
+
     if(!isSupportCanvas()){
     	alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
     }
@@ -178,6 +193,7 @@
 	function closeHeatmap(){
         heatmapOverlay.hide();
     }
+
     //默认显示热力图
     openHeatmap();
     function setGradient(){

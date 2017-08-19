@@ -1,6 +1,7 @@
 ## About HotMap
 
 this is a projet to show hot map about some special data.
+show data come from hotmapdata.json, this file is created by dataformator.py
 
 ### Description
 
